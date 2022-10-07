@@ -1,22 +1,7 @@
 #!/usr/bin/env python3
 
 import socket
-from gpiozero import Motor, OutputDevice
-from time import sleep
 
-# Define and setup GPIO pins
-# Left foot
-motor1 = Motor(24, 27)
-motor1_enable = OutputDevice(5, initial_value=1)
-# Right foot
-motor2 = Motor(6, 22)
-motor2_enable = OutputDevice(17, initial_value=1)
-# Right tentacle
-motor3 = Motor(23, 16)
-motor3_enable = OutputDevice(12, initial_value=1)
-# Left tentacle
-motor4 = Motor(13, 18)
-motor4_enable = OutputDevice(25, initial_value=1) 
 
 # HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 HOST = "0.0.0.0"  # Listen on all interfaces
