@@ -9,7 +9,7 @@ drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
 HOST = "192.168.0.101"  # The raspberry pi's hostname or IP address
-PORT = 65432  # The port used by the server
+PORT = 65434  # The port used by the server
 
 def pos_to_command(x, z):
     if 0.0 < x < 1.0:        # Check hand detected in frame
@@ -36,7 +36,7 @@ capture = cv2.VideoCapture(0)
 
 #HOST = "127.0.0.1"  # The server's hostname or IP address
 HOST = "192.168.0.101"  # The raspberry pi's hostname or IP address
-PORT = 65433  # The port used by the server
+PORT = 65434  # The port used by the server
 
 while(True):
 
