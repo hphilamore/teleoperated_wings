@@ -9,13 +9,14 @@ import pyautogui
 import numpy as np
 # from PIL import ImageGrab
 from mss import mss
+from subprocess import Popen, PIPE
  
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 HOST = "192.168.227.193"  # The raspberry pi's hostname or IP address
-PORT = 65436            # The port used by the server
+PORT = 65437            # The port used by the server
 
 
 
@@ -47,12 +48,28 @@ def pos_to_command(x, z):
 
 capture = cv2.VideoCapture(0)
 
+#----------------------------------------
 # if using window
-REGION = (0, 200, 400, 300) # (left_x, top_y, right_x, bottom_y)
+# REGION = (0, 200, 400, 300) # (left_x, top_y, right_x, bottom_y)
 #REGION = (700, 200, 800, 400) # (left_x, top_y, right_x, bottom_y)
 #REGION = (899.000000,213.000000,44.000000,264.000000) # (left_x, top_y, right_x, bottom_y)
 # width, height = pyautogui.size()
 # print(width, height)
+process = Popen(['./windowlist', 'windowlist.m'], stdout=PIPE, stderr=PIPE)
+stdout, stderr = process.communicate()
+window_positions = stdout.decode().split('\n')
+
+for w in window_positions:
+    if 'zoom.us:Zoom' in w:            # Find zoom meeting window
+        print(w)
+        w = w.split(':')               # Separate window info 
+        print(w)
+        coordinates = w[-1].split(',')   # Separate window coordinates
+        print(coordinates)
+        coordinates = [int(float(i)) for i in coordinates]  # Separate window coordinates
+        print(coordinates)
+
+#----------------------------------------
 
 
 while(True):
@@ -63,8 +80,12 @@ while(True):
                        max_num_hands=1) as hands:
 
         with mss() as sct:
-            monitor = {"top": 461, "left": 7, "width": 590, "height": 384}
-
+            # monitor = {"top": 461, "left": 7, "width": 590, "height": 384}
+            monitor = {"top": coordinates[1], 
+                       "left": coordinates[0], 
+                       "width": coordinates[3], 
+                       "height": coordinates[2]
+                       }
             #--------------------------------------------------
             # if using web-cam
             ret, frame = capture.read()
@@ -109,19 +130,19 @@ while(True):
                     command = pos_to_command(x, z)
                     print(command)
 
-                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                #     s.connect((HOST, PORT))
-                #     #s.sendall(b"Hello, world")
-                #     s.sendall(command.encode())
-                #     data = s.recv(1024)
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                    s.connect((HOST, PORT))
+                    #s.sendall(b"Hello, world")
+                    s.sendall(command.encode())
+                    data = s.recv(1024)
 
                 # print(f"Received {data!r}")
 
             try:
-                cv2.namedWindow('image',cv2.WINDOW_NORMAL)
-                cv2.resizeWindow('image', 590,384)
-                cv2.imshow('image', frame)
+                cv2.namedWindow('image',cv2.WINDOW_NORMAL) # Implicitly create the window
+                cv2.resizeWindow('image', 590,384)         # Resize the window
+                cv2.imshow('image', frame)                 # Show the window 
             except:
                 pass
      
