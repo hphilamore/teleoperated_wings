@@ -7,7 +7,8 @@ import mediapipe
 import socket
 import pyautogui
 import numpy as np
-from PIL import ImageGrab
+# from PIL import ImageGrab
+from mss import mss
  
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
@@ -61,63 +62,68 @@ while(True):
                        min_tracking_confidence=0.7, 
                        max_num_hands=1) as hands:
 
-        
-        #--------------------------------------------------
-        # if using web-cam
-        ret, frame = capture.read()
+        with mss() as sct:
+            monitor = {"top": 461, "left": 7, "width": 590, "height": 384}
 
-        # if using window
-        frame = ImageGrab.grab(bbox=REGION) 
-        frame = np.array(frame)
-        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-        #--------------------------------------------------
+            #--------------------------------------------------
+            # if using web-cam
+            ret, frame = capture.read()
 
-        results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            # if using window
+            #frame = ImageGrab.grab(bbox=REGION) 
+            frame = np.array(sct.grab(monitor))
+            frame = np.array(frame)
+            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+            #--------------------------------------------------
 
-        # Check for hands
-        if results.multi_hand_landmarks != None:
+            results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-            # Draw hands
-            for handLandmarks in results.multi_hand_landmarks:
-                drawingModule.draw_landmarks(frame, 
-                                             handLandmarks, 
-                                             handsModule.HAND_CONNECTIONS)
+            # Check for hands
+            if results.multi_hand_landmarks != None:
 
-            # Find each hand up to max number of hands 
-            for hand_no, hand_landmarks in enumerate(results.multi_hand_landmarks):
-                print(f'HAND NUMBER: {hand_no+1}')
-                print('-----------------------')
-                # Find mean of x, y position of all nodes  
-                x_ = []
-                z_ = []
+                # Draw hands
+                for handLandmarks in results.multi_hand_landmarks:
+                    drawingModule.draw_landmarks(frame, 
+                                                 handLandmarks, 
+                                                 handsModule.HAND_CONNECTIONS)
 
-                for i in range(20):
-                    x_.append(hand_landmarks.landmark[handsModule.HandLandmark(i).value].x)
-                    z_.append(hand_landmarks.landmark[handsModule.HandLandmark(i).value].z)
-                        
-                # Find mean value of x and z coordinate of ndodes 
-                x = sum(x_)/len(x_)                
-                z = sum(z_)/len(z_)
+                # Find each hand up to max number of hands 
+                for hand_no, hand_landmarks in enumerate(results.multi_hand_landmarks):
+                    print(f'HAND NUMBER: {hand_no+1}')
+                    print('-----------------------')
+                    # Find mean of x, y position of all nodes  
+                    x_ = []
+                    z_ = []
 
-                print(x, z)
+                    for i in range(20):
+                        x_.append(hand_landmarks.landmark[handsModule.HandLandmark(i).value].x)
+                        z_.append(hand_landmarks.landmark[handsModule.HandLandmark(i).value].z)
+                            
+                    # Find mean value of x and z coordinate of ndodes 
+                    x = sum(x_)/len(x_)                
+                    z = sum(z_)/len(z_)
 
-                # Choose a command to send to the raspberry pi 
-                command = pos_to_command(x, z)
-                print(command)
+                    print(x, z)
 
-            # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-            #     s.connect((HOST, PORT))
-            #     #s.sendall(b"Hello, world")
-            #     s.sendall(command.encode())
-            #     data = s.recv(1024)
+                    # Choose a command to send to the raspberry pi 
+                    command = pos_to_command(x, z)
+                    print(command)
 
-            # print(f"Received {data!r}")
+                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                #     s.connect((HOST, PORT))
+                #     #s.sendall(b"Hello, world")
+                #     s.sendall(command.encode())
+                #     data = s.recv(1024)
 
-        try:
-            cv2.imshow('Test hand', frame)
-        except:
-            pass
- 
-        if cv2.waitKey(1) == 27:
-            break
+                # print(f"Received {data!r}")
+
+            try:
+                cv2.namedWindow('image',cv2.WINDOW_NORMAL)
+                cv2.resizeWindow('image', 590,384)
+                cv2.imshow('image', frame)
+            except:
+                pass
+     
+            if cv2.waitKey(1) == 27:
+                break
