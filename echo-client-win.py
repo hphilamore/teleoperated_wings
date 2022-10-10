@@ -60,7 +60,9 @@ stdout, stderr = process.communicate()
 window_positions = stdout.decode().split('\n')
 
 for w in window_positions:
-    if 'zoom.us:Zoom' in w:            # Find zoom meeting window
+    # if 'zoom.us:Zoom' in w:                 # Find zoom meeting window
+    #if 'zoom.us:zoom floating video' in w:   # Find zoom meeting window during share screen
+    if 'Vysor' in w:                          # Find vysor window for robot POV
         print(w)
         w = w.split(':')               # Separate window info 
         print(w)
@@ -75,8 +77,8 @@ for w in window_positions:
 while(True):
 
     with handsModule.Hands(static_image_mode=False, 
-                       min_detection_confidence=0.7, 
-                       min_tracking_confidence=0.7, 
+                       min_detection_confidence=0.3, 
+                       min_tracking_confidence=0.3, 
                        max_num_hands=1) as hands:
 
         with mss() as sct:
@@ -130,12 +132,12 @@ while(True):
                     command = pos_to_command(x, z)
                     print(command)
 
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                    s.connect((HOST, PORT))
-                    #s.sendall(b"Hello, world")
-                    s.sendall(command.encode())
-                    data = s.recv(1024)
+                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                #     s.connect((HOST, PORT))
+                #     #s.sendall(b"Hello, world")
+                #     s.sendall(command.encode())
+                #     data = s.recv(1024)
 
                 # print(f"Received {data!r}")
 
