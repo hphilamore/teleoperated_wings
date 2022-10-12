@@ -7,7 +7,7 @@ import mediapipe
 import socket
 import pyautogui
 import numpy as np
-# from PIL import ImageGrab
+from PIL import Image#Grab
 from mss import mss
 from subprocess import Popen, PIPE
  
@@ -16,7 +16,7 @@ handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 HOST = "192.168.227.193"  # The raspberry pi's hostname or IP address
-PORT = 65437            # The port used by the server
+PORT = 65438            # The port used by the server
 
 
 
@@ -49,7 +49,10 @@ def pos_to_command(x, z):
 capture = cv2.VideoCapture(0)
 
 #----------------------------------------
-# if using window
+"""
+Run code to set up window if using window grab (zoom window)
+"""
+
 # REGION = (0, 200, 400, 300) # (left_x, top_y, right_x, bottom_y)
 #REGION = (700, 200, 800, 400) # (left_x, top_y, right_x, bottom_y)
 #REGION = (899.000000,213.000000,44.000000,264.000000) # (left_x, top_y, right_x, bottom_y)
@@ -60,9 +63,9 @@ stdout, stderr = process.communicate()
 window_positions = stdout.decode().split('\n')
 
 for w in window_positions:
-    if 'zoom.us' in w:                 # Temp solution
+    #if 'zoom.us' in w:                 # Temp solution
     #if 'zoom.us:Zoom' in w:                 # Find zoom meeting window
-    #if 'zoom.us:zoom floating video' in w:   # Find zoom meeting window during share screen
+    if 'zoom.us:zoom floating video' in w:   # Find zoom meeting window during share screen
     #if 'Vysor' in w:                          # Find vysor window for robot POV
         print(w)
         w = w.split(':')               # Separate window info 
@@ -79,8 +82,8 @@ for w in window_positions:
 while(True):
 
     with handsModule.Hands(static_image_mode=False, 
-                       min_detection_confidence=0.3, 
-                       min_tracking_confidence=0.3, 
+                       min_detection_confidence=0.7, 
+                       min_tracking_confidence=0.7, 
                        max_num_hands=1) as hands:
 
         with mss() as sct:
@@ -91,17 +94,25 @@ while(True):
                        "height": coordinates[2]
                        }
             #--------------------------------------------------
-            # if using web-cam
+            # CODE TO GET FRAME:
+            """
+            If using web-cam
+            """
             ret, frame = capture.read()
 
+            """
+            If using window grab (zoom window)
+            """
             # if using window
             #frame = ImageGrab.grab(bbox=REGION) 
+            #frame = np.array(frame)
             frame = np.array(sct.grab(monitor))
-            frame = np.array(frame)
+            #frame = Image.frombytes("RGB", frame.size, frame.bgra, "raw", "BGRX")  # Convert to PIL.Image
             frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
             #--------------------------------------------------
+            #results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
 
-            results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            results = hands.process(frame)
 
             # Check for hands
             if results.multi_hand_landmarks != None:
@@ -134,14 +145,14 @@ while(True):
                     command = pos_to_command(x, z)
                     print(command)
 
-                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                #     s.connect((HOST, PORT))
-                #     #s.sendall(b"Hello, world")
-                #     s.sendall(command.encode())
-                #     data = s.recv(1024)
+                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                    s.connect((HOST, PORT))
+                    #s.sendall(b"Hello, world")
+                    s.sendall(command.encode())
+                    data = s.recv(1024)
 
-                # print(f"Received {data!r}")
+                print(f"Received {data!r}")
 
             try:
                 cv2.namedWindow('image',cv2.WINDOW_NORMAL) # Implicitly create the window
