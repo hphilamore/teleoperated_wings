@@ -16,7 +16,7 @@ handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 HOST = "192.168.227.193"  # The raspberry pi's hostname or IP address
-PORT = 65438            # The port used by the server
+PORT = 65442            # The port used by the server
 
 
 

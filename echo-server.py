@@ -20,37 +20,52 @@ motor4_enable = OutputDevice(25, initial_value=1)
 
 # HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 HOST = "0.0.0.0"  # Listen on all interfaces
-PORT = 65436  # Port to listen on (non-privileged ports are > 1023)
+PORT = 65442  # Port to listen on (non-privileged ports are > 1023)
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+server_socket.bind((HOST, PORT))
+server_socket.listen()
+
+
 
 while(1):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+    #with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-        s.bind((HOST, PORT))
-        s.listen()
-        conn, addr = s.accept()
-        with conn:
-            print(f"Connected by {addr}")
-            while True:
-                data = conn.recv(1024)
-                if not data:
-                    break
-                msg = data.decode()
-                print(msg)
+        # s.bind((HOST, PORT))
+        # s.listen()
+    #try:
+    conn, addr = server_socket.accept()
+    with conn:
+        print(f"Connected by {addr}")
+        while True:
+            data = conn.recv(1024)
+            if not data:
+                break
+            msg = data.decode()
+            print(msg)
 
-                if msg == 'stop':
-                    motor1.stop()
-                    motor2.stop()
+            if msg == 'stop':
+                motor1.stop()
+                motor2.stop()
 
-                elif msg == 'left':
-                    motor1.forward(0.5)
-                    motor2.stop()
+            elif msg == 'left':
+                motor1.forward(0.5)
+                motor2.stop()
 
-                elif msg == 'right':
-                    motor1.stop()
-                    motor2.forward(0.5)
+            elif msg == 'right':
+                motor1.stop()
+                motor2.forward(0.5)
 
-                elif msg == 'forward':
-                    motor1.forward(0.5)
-                    motor2.forward(0.5)
+            elif msg == 'forward':
+                motor1.forward(0.5)
+                motor2.forward(0.5)
 
-                conn.sendall(data)
+            conn.sendall(data)
+    
+    # except:
+    #     print('no comms')
+
+
+# except KeyboardInterrupt:
+#         pass
+
