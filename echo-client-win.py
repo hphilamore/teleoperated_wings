@@ -60,14 +60,16 @@ stdout, stderr = process.communicate()
 window_positions = stdout.decode().split('\n')
 
 for w in window_positions:
-    # if 'zoom.us:Zoom' in w:                 # Find zoom meeting window
+    if 'zoom.us' in w:                 # Temp solution
+    #if 'zoom.us:Zoom' in w:                 # Find zoom meeting window
     #if 'zoom.us:zoom floating video' in w:   # Find zoom meeting window during share screen
-    if 'Vysor' in w:                          # Find vysor window for robot POV
+    #if 'Vysor' in w:                          # Find vysor window for robot POV
         print(w)
         w = w.split(':')               # Separate window info 
         print(w)
         coordinates = w[-1].split(',')   # Separate window coordinates
         print(coordinates)
+        coordniates = [410.000000,679.000000,40.000000,40.000000]
         coordinates = [int(float(i)) for i in coordinates]  # Separate window coordinates
         print(coordinates)
 

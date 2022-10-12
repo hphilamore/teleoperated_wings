@@ -19,21 +19,28 @@ motor4_enable = OutputDevice(25, initial_value=1)
 try:
 
 	# Full speed feet forwards
-	motor1.forward()
-	motor2.forward()
+	motor1.forward(0.5)
+	motor2.forward(0.5)
 	sleep(1)
 
 
 	for i in range(3):
 		# Full speed tentacles forwards
-		motor4.forward(0.5)
+		motor3.forward()
+		motor4.forward()
 
 		sleep(3)
 
+		# motor3.backward()
+		# motor4.backward()
+
+		# sleep(3)
+
 		# Tentacles off
+		motor3.stop()
 		motor4.stop()
 
-		sleep(2)
+		sleep(4)
 
 	motor1.stop()
 	motor2.stop()
