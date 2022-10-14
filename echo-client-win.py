@@ -10,6 +10,7 @@ import numpy as np
 from PIL import Image#Grab
 from mss import mss
 from subprocess import Popen, PIPE
+import time
  
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
@@ -27,6 +28,8 @@ input_mode = 'camera'       # 'camera' / 'window'
 # win_name = 'zoom.us:Zoom'                 # Find zoom meeting window 
 # win_name = 'zoom.us:zoom floating video'  # Find zoom meeting window during share screen 
 win_name = 'Vysor'                        # Find vysor window for robot POV 
+
+flag_no_hand = False 
 
 
 
@@ -109,10 +112,11 @@ while(True):
                 ret, frame = capture.read()
                 #frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                frame = cv2.flip(frame, 1)
 
             results = hands.process(frame)
 
-            # Check for hands
+            # Check if hand detected
             if results.multi_hand_landmarks != None:
 
                 # Draw hands
@@ -139,18 +143,37 @@ while(True):
 
                     print(x, z)
 
-                    # Choose a command to send to the raspberry pi 
+                    # Choose a command to send to server socket on raspberry pi 
                     command = pos_to_command(x, z)
                     print(command)
 
+                # Send command to server socket on raspberry pi        
                 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
                     s.connect((HOST, PORT))
                     #s.sendall(b"Hello, world")
                     s.sendall(command.encode())
-                    data = s.recv(1024)
+                #     data = s.recv(1024)
 
-                print(f"Received {data!r}")
+                # print(f"Received {data!r}")
+
+            else:
+                print('No hand')
+                if not flag_no_hand:     # If there was a hand in previous frame
+                    flag_no_hand = True  # Raise the flag 
+                    start = time.time()  # Start the timer
+
+                else:
+                    end = time.time()
+                    if end-start >= 3:
+                        flag_no_hand = False  # Lower the flag 
+                        print('stop')
+                        command = 'stop'   
+
+
+
+
+
 
             try:
                 cv2.namedWindow('image',cv2.WINDOW_NORMAL) # Implicitly create the window
