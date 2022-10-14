@@ -147,28 +147,33 @@ while(True):
                     command = pos_to_command(x, z)
                     print(command)
 
-                # Send command to server socket on raspberry pi        
-                with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                    #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                    s.connect((HOST, PORT))
-                    #s.sendall(b"Hello, world")
-                    s.sendall(command.encode())
-                #     data = s.recv(1024)
-
-                # print(f"Received {data!r}")
+                # # Send command to server socket on raspberry pi        
+                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                #     s.connect((HOST, PORT))
+                #     s.sendall(command.encode())
 
             else:
                 print('No hand')
                 if not flag_no_hand:     # If there was a hand in previous frame
                     flag_no_hand = True  # Raise the flag 
                     start = time.time()  # Start the timer
+                    command = 'no command'
 
                 else:
                     end = time.time()
                     if end-start >= 3:
                         flag_no_hand = False  # Lower the flag 
                         print('stop')
-                        command = 'stop'   
+                        command = 'stop'  
+
+
+
+            # Send command to server socket on raspberry pi        
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                s.connect((HOST, PORT))
+                s.sendall(command.encode()) 
 
 
 
