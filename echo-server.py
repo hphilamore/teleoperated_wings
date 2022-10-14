@@ -3,6 +3,7 @@
 import socket
 from gpiozero import Motor, OutputDevice
 from time import sleep
+from time import time
 
 # Define and setup GPIO pins
 # Left foot
@@ -25,6 +26,8 @@ PORT = 65442  # Port to listen on (non-privileged ports are > 1023)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((HOST, PORT))
 server_socket.listen()
+
+start_timer = time()
 
 
 
@@ -60,7 +63,7 @@ while(1):
                 motor1.forward(0.5)
                 motor2.forward(0.5)
 
-            conn.sendall(data)
+            #conn.sendall(data)
     
     # except:
     #     print('no comms')
