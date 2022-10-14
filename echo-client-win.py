@@ -14,9 +14,19 @@ from subprocess import Popen, PIPE
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
+# TODO: Variables as command line arguments
+
 # Set up server ID and port 
-HOST = "192.168.227.193"  # The raspberry pi's hostname or IP address
-PORT = 65442            # The port used by the server
+HOST = "192.168.227.193"    # The raspberry pi's hostname or IP address
+PORT = 65442                # The port used by the server
+
+input_mode = 'camera'       # 'camera' / 'window'
+
+# Window name is using window
+# win_name = 'zoom.us'                      # Temp fix
+# win_name = 'zoom.us:Zoom'                 # Find zoom meeting window 
+# win_name = 'zoom.us:zoom floating video'  # Find zoom meeting window during share screen 
+win_name = 'Vysor'                        # Find vysor window for robot POV 
 
 
 
@@ -44,39 +54,27 @@ def pos_to_command(x, z):
     #print(out)
     return out
  
-
-
 capture = cv2.VideoCapture(0)
 
-#----------------------------------------
-"""
-Run code to set up window if using window grab (zoom window)
-"""
 
-# REGION = (0, 200, 400, 300) # (left_x, top_y, right_x, bottom_y)
-#REGION = (700, 200, 800, 400) # (left_x, top_y, right_x, bottom_y)
-#REGION = (899.000000,213.000000,44.000000,264.000000) # (left_x, top_y, right_x, bottom_y)
-# width, height = pyautogui.size()
-# print(width, height)
-process = Popen(['./windowlist', 'windowlist.m'], stdout=PIPE, stderr=PIPE)
-stdout, stderr = process.communicate()
-window_positions = stdout.decode().split('\n')
+if input_mode == 'window':
+    """
+    Set up window to take frame from 
 
-for w in window_positions:
-    #if 'zoom.us' in w:                 # Temp solution
-    #if 'zoom.us:Zoom' in w:                 # Find zoom meeting window
-    if 'zoom.us:zoom floating video' in w:   # Find zoom meeting window during share screen
-    #if 'Vysor' in w:                          # Find vysor window for robot POV
-        print(w)
-        w = w.split(':')               # Separate window info 
-        print(w)
-        coordinates = w[-1].split(',')   # Separate window coordinates
-        print(coordinates)
-        coordniates = [410.000000,679.000000,40.000000,40.000000]
-        coordinates = [int(float(i)) for i in coordinates]  # Separate window coordinates
-        print(coordinates)
+    """ 
+    process = Popen(['./windowlist', 'windowlist.m'], stdout=PIPE, stderr=PIPE)
+    stdout, stderr = process.communicate()
+    window_positions = stdout.decode().split('\n')
 
-#----------------------------------------
+    for w in window_positions:
+        if win_name in w:                        # Find vysor window for robot POV
+            print(w)
+            w = w.split(':')                     # Separate window info 
+            print(w)
+            coordinates = w[-1].split(',')       # Separate window coordinates
+            print(coordinates)
+            coordinates = [int(float(i)) for i in coordinates]  # Convert coordinates to integer
+            print(coordinates)
 
 
 while(True):
@@ -87,30 +85,30 @@ while(True):
                        max_num_hands=1) as hands:
 
         with mss() as sct:
-            # monitor = {"top": 461, "left": 7, "width": 590, "height": 384}
-            monitor = {"top": coordinates[1], 
-                       "left": coordinates[0], 
-                       "width": coordinates[3], 
-                       "height": coordinates[2]
-                       }
-            #--------------------------------------------------
-            # CODE TO GET FRAME:
-            """
-            If using web-cam
-            """
-            ret, frame = capture.read()
+            # Use coordinates of window
+            if input_mode == 'window':
+                monitor = {"top": coordinates[1], 
+                           "left": coordinates[0], 
+                           "width": coordinates[3], 
+                           "height": coordinates[2]
+                           }
 
-            """
-            If using window grab (zoom window)
-            """
-            # if using window
-            #frame = ImageGrab.grab(bbox=REGION) 
-            #frame = np.array(frame)
-            frame = np.array(sct.grab(monitor))
-            #frame = Image.frombytes("RGB", frame.size, frame.bgra, "raw", "BGRX")  # Convert to PIL.Image
-            frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
-            #--------------------------------------------------
-            #results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+            
+            # Grab current image            
+            if input_mode == 'window':
+                """
+                Input taken from window
+                """
+                frame = np.array(sct.grab(monitor))
+                frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+
+            else:
+                """
+                Input taken from webcam
+                """
+                ret, frame = capture.read()
+                #frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
             results = hands.process(frame)
 

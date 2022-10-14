@@ -19,8 +19,8 @@ motor4_enable = OutputDevice(25, initial_value=1)
 try:
 
 	# Full speed feet forwards
-	motor1.forward(0.5)
-	motor2.forward(0.5)
+	motor1.forward()
+	motor2.forward()
 	sleep(1)
 
 
