@@ -7,7 +7,7 @@ import mediapipe
 import socket
 import pyautogui
 import numpy as np
-from PIL import Image#Grab
+from PIL import ImageGrab
 from mss import mss
 from subprocess import Popen, PIPE
 import time
@@ -19,17 +19,18 @@ handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 # HOST = "192.168.227.193"    # The raspberry pi's hostname or IP address
-HOST = "192.168.205.99"    # The raspberry pi's hostname or IP address
+HOST = "192.168.128.12"    # The raspberry pi's hostname or IP address
 PORT = 65442                # The port used by the server
 
 input_mode = 'window'       # 'camera' / 'window'
 
 # Window name is using window
-# win_name = 'zoom.us'                      # Temp fix
-#win_name = 'zoom.us:Zoom'                 # Find zoom meeting window 
+win_name = 'zoom.us'                      # Temp fix
+#win_name = 'Microsoft Teams'
+win_name = 'zoom.us:Zoom Meeting'                 # Find zoom meeting window 
 #win_name = 'zoom.us:zoom floating video'  # Find zoom meeting window during share screen 
-win_name = 'Vysor'                        # Find vysor window for robot POV 
-win_name = 'Vysor:SM'                        # Find vysor window for robot POV 
+#win_name = 'Vysor'                        # Find vysor window for robot POV 
+#win_name = 'Vysor:SM'                        # Find vysor window for robot POV 
 #win_name = 'Vysor:ART'                        # Find vysor window for robot POV 
 
 flag_no_hand = False 
@@ -98,6 +99,11 @@ while(True):
                            "width": coordinates[3], 
                            "height": coordinates[2]
                            }
+                # monitor = {"top": 0, 
+                #            "left": 0, 
+                #            "width": 500, 
+                #            "height": 500
+                #            }
 
             
             # Grab current image            
@@ -106,6 +112,7 @@ while(True):
                 Input taken from window
                 """
                 frame = np.array(sct.grab(monitor))
+                frame = np.array(ImageGrab.grab())                # include this line if full screen image required
                 frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
             else:
@@ -172,11 +179,11 @@ while(True):
 
 
 
-            # Send command to server socket on raspberry pi        
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                s.connect((HOST, PORT))
-                s.sendall(command.encode()) 
+            # # Send command to server socket on raspberry pi        
+            # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+            #     s.connect((HOST, PORT))
+            #     s.sendall(command.encode()) 
 
 
 
