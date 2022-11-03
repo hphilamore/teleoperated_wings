@@ -99,12 +99,13 @@ while(1):
                 motor2.stop()
 
             elif msg == 'left':
-                motor1.forward(0.5)
-                motor2.stop()
-
-            elif msg == 'right':
                 motor1.stop()
                 motor2.forward(0.5)
+
+            elif msg == 'right':
+                motor1.forward(0.5)
+                motor2.stop()
+                
 
             elif msg == 'forward':
                 motor1.forward(0.5)

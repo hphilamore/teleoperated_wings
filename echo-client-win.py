@@ -192,7 +192,7 @@ while(True):
 
             try:
                 cv2.namedWindow('image',cv2.WINDOW_NORMAL) # Implicitly create the window
-                cv2.resizeWindow('image', 590,384)         # Resize the window
+                cv2.resizeWindow('image', 300,384)         # Resize the window
                 cv2.imshow('image', frame)                 # Show the window 
             except:
                 pass
