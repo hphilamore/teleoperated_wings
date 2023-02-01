@@ -19,7 +19,7 @@ handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 # HOST = "192.168.227.193"    # The raspberry pi's hostname or IP address
-HOST = "192.168.128.12"    # The raspberry pi's hostname or IP address
+HOST = "192.168.128.11"    # The raspberry pi's hostname or IP address
 PORT = 65442                # The port used by the server
 
 input_mode = 'window'       # 'camera' / 'window'
@@ -179,11 +179,11 @@ while(True):
 
 
 
-            # # Send command to server socket on raspberry pi        
-            # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-            #     s.connect((HOST, PORT))
-            #     s.sendall(command.encode()) 
+            # Send command to server socket on raspberry pi        
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                s.connect((HOST, PORT))
+                s.sendall(command.encode()) 
 
 
 
@@ -192,7 +192,7 @@ while(True):
 
             try:
                 cv2.namedWindow('image',cv2.WINDOW_NORMAL) # Implicitly create the window
-                cv2.resizeWindow('image', 590,384)         # Resize the window
+                cv2.resizeWindow('image', 300,384)         # Resize the window
                 cv2.imshow('image', frame)                 # Show the window 
             except:
                 pass

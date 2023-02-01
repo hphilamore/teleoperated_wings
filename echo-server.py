@@ -6,10 +6,10 @@ from time import sleep
 from time import time
 
 # Define and setup GPIO pins
-# Left foot
+# Rigth foot
 motor1 = Motor(24, 27)
 motor1_enable = OutputDevice(5, initial_value=1)
-# Right foot
+# Left foot
 motor2 = Motor(6, 22)
 motor2_enable = OutputDevice(17, initial_value=1)
 # Right tentacle
@@ -95,7 +95,7 @@ while(1):
             print(msg)
 
             if msg == 'stop':
-                motor1.stop()
+                motor1.stop() 
                 motor2.stop()
 
             elif msg == 'left':
