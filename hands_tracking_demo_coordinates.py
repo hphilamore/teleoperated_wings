@@ -1,7 +1,3 @@
-#!/usr/bin/env python3
-# https://realpython.com/python-sockets/
-
-import socket
 import cv2
 import mediapipe
 import socket
@@ -10,7 +6,7 @@ drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
 HOST = "192.168.0.101"  # The raspberry pi's hostname or IP address
-PORT = 65434  # The port used by the server
+PORT = 65432  # The port used by the server
 
 def pos_to_command(x, z):
     if 0.0 < x < 1.0:        # Check hand detected in frame
@@ -34,21 +30,17 @@ def pos_to_command(x, z):
     return out
  
 capture = cv2.VideoCapture(0)
-
-#HOST = "127.0.0.1"  # The server's hostname or IP address
-HOST = "192.168.0.101"  # The raspberry pi's hostname or IP address
-PORT = 65434  # The port used by the server
-
-while(True):
-
-    with handsModule.Hands(static_image_mode=False, 
+ 
+with handsModule.Hands(static_image_mode=False, 
                        min_detection_confidence=0.7, 
                        min_tracking_confidence=0.7, 
                        max_num_hands=2) as hands:
-
+ 
+    while (True):
+ 
         ret, frame = capture.read()
         results = hands.process(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
-
+        
         # Check for hands
         if results.multi_hand_landmarks != None:
 
@@ -69,7 +61,7 @@ while(True):
                 for i in range(20):
                     x_.append(hand_landmarks.landmark[handsModule.HandLandmark(i).value].x)
                     z_.append(hand_landmarks.landmark[handsModule.HandLandmark(i).value].z)
-                        
+                    
                 # Find mean value of x and z coordinate of ndodes 
                 x = sum(x_)/len(x_)                
                 z = sum(z_)/len(z_)
@@ -80,19 +72,11 @@ while(True):
                 command = pos_to_command(x, z)
                 print(command)
 
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                s.connect((HOST, PORT))
-                #s.sendall(b"Hello, world")
-                s.sendall(command.encode())
-                data = s.recv(1024)
-
-            print(f"Received {data!r}")
-
-        try:
-            cv2.imshow('Test hand', frame)
-        except:
-            pass
+ 
+        cv2.imshow('Test hand', frame)
  
         if cv2.waitKey(1) == 27:
             break
+ 
+cv2.destroyAllWindows()
+capture.release()

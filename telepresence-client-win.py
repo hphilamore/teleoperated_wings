@@ -1,6 +1,19 @@
 #!/usr/bin/env python3
 # https://realpython.com/python-sockets/
 
+
+"""
+#----------------------------------------------------------
+
+Tracks hand position in image from web-cam OR desktop window
+
+Chooses a command based on hand position.
+
+Sends command to raspberry pi robot over wifi. 
+
+#----------------------------------------------------------
+"""
+
 import socket
 import cv2
 import mediapipe
@@ -11,9 +24,11 @@ from PIL import ImageGrab
 from mss import mss
 from subprocess import Popen, PIPE
 import time
+import sys
  
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
+
 
 # TODO: Variables as command line arguments
 
@@ -22,16 +37,16 @@ handsModule = mediapipe.solutions.hands
 HOST = "192.168.128.11"    # The raspberry pi's hostname or IP address
 PORT = 65442                # The port used by the server
 
-input_mode = 'window'       # 'camera' / 'window'
+input_mode = 'window'  #'camera' #'window'       # 'camera' / 'window'
 
 # Window name is using window
-win_name = 'zoom.us'                      # Temp fix
+win_name = 'zoom.us'                      
 #win_name = 'Microsoft Teams'
-win_name = 'zoom.us:Zoom Meeting'                 # Find zoom meeting window 
+win_name = 'zoom.us:Zoom Meeting'          # Find zoom meeting window 
 #win_name = 'zoom.us:zoom floating video'  # Find zoom meeting window during share screen 
 #win_name = 'Vysor'                        # Find vysor window for robot POV 
-#win_name = 'Vysor:SM'                        # Find vysor window for robot POV 
-#win_name = 'Vysor:ART'                        # Find vysor window for robot POV 
+#win_name = 'Vysor:SM'                     # Find vysor window for robot POV 
+#win_name = 'Vysor:ART'                    # Find vysor window for robot POV 
 
 flag_no_hand = False 
 
@@ -56,25 +71,21 @@ def pos_to_command(x, z):
 
     else:
         out = 'none'
-        return out
-
-    #print(out)
+        
     return out
  
-capture = cv2.VideoCapture(0)
+
 
 
 if input_mode == 'window':
-    """
-    Set up window to take frame from 
-
-    """ 
+    """ Set up window for image capture """
+     
     process = Popen(['./windowlist', 'windowlist.m'], stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
     window_positions = stdout.decode().split('\n')
 
     for w in window_positions:
-        if win_name in w:                        # Find vysor window for robot POV
+        if win_name in w:                        # Find window 
             print(w)
             w = w.split(':')                     # Separate window info 
             print(w)
@@ -82,6 +93,11 @@ if input_mode == 'window':
             print(coordinates)
             coordinates = [int(float(i)) for i in coordinates]  # Convert coordinates to integer
             print(coordinates)
+
+else:
+    """ Setup web cam ready for video capture """
+    capture = cv2.VideoCapture(0)
+
 
 
 while(True):
@@ -92,27 +108,33 @@ while(True):
                        max_num_hands=1) as hands:
 
         with mss() as sct:
-            # Use coordinates of window
-            if input_mode == 'window':
-                monitor = {"top": coordinates[1], 
-                           "left": coordinates[0], 
-                           "width": coordinates[3], 
-                           "height": coordinates[2]
-                           }
-                # monitor = {"top": 0, 
-                #            "left": 0, 
-                #            "width": 500, 
-                #            "height": 500
-                #            }
-
             
-            # Grab current image            
+            """
+            Input taken from window
+            """
             if input_mode == 'window':
-                """
-                Input taken from window
-                """
-                frame = np.array(sct.grab(monitor))
-                frame = np.array(ImageGrab.grab())                # include this line if full screen image required
+
+                try:
+                    # Use coordinates of window
+                    window = {"top": coordinates[1], 
+                              "left": coordinates[0], 
+                              "width": coordinates[3], 
+                              "height": coordinates[2]
+                               }
+
+                except:
+                    print("No window with specified name")
+                    print("Exiting program...")
+                    sys.exit(1)
+                
+                # Grab current image    
+                frame = np.array(sct.grab(window))
+
+                # ------------------------------------------------
+                # Uncomment this line if full screen image required
+                # frame = np.array(ImageGrab.grab())
+                # ------------------------------------------------  
+
                 frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
 
             else:
@@ -121,9 +143,11 @@ while(True):
                 """
                 ret, frame = capture.read()
                 #frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+                # Grab current image    
                 frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 frame = cv2.flip(frame, 1)
 
+            # Look for hands    
             results = hands.process(frame)
 
             # Check if hand detected
@@ -139,7 +163,7 @@ while(True):
                 for hand_no, hand_landmarks in enumerate(results.multi_hand_landmarks):
                     print(f'HAND NUMBER: {hand_no+1}')
                     print('-----------------------')
-                    # Find mean of x, y position of all nodes  
+ 
                     x_ = []
                     z_ = []
 
@@ -157,11 +181,6 @@ while(True):
                     command = pos_to_command(x, z)
                     print(command)
 
-                # # Send command to server socket on raspberry pi        
-                # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                #     s.connect((HOST, PORT))
-                #     s.sendall(command.encode())
 
             else:
                 print('No hand')
@@ -179,12 +198,11 @@ while(True):
 
 
 
-            # Send command to server socket on raspberry pi        
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                s.connect((HOST, PORT))
-                s.sendall(command.encode()) 
-
+            # Send command to server socket on raspberry pi
+            # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+            #     s.connect((HOST, PORT))
+            #     s.sendall(command.encode()) 
 
 
 

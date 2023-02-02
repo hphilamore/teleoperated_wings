@@ -9,6 +9,8 @@
 //
 // Run with:
 // ./windowlist
+// 
+//  Note : Check Security & Privacy >> Screen Recording >> Terminal enabled  
 //
 ////////////////////////////////////////////////////////////////////////////////
 #include <Cocoa/Cocoa.h>
