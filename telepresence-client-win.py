@@ -34,10 +34,11 @@ handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 # HOST = "192.168.227.193"    # The raspberry pi's hostname or IP address
-HOST = "192.168.128.11"    # The raspberry pi's hostname or IP address
+HOST = "192.168.8.159"    # The raspberry pi's hostname or IP address
 PORT = 65442                # The port used by the server
 
-input_mode = 'window'  #'camera' #'window'       # 'camera' / 'window'
+# Take video stream from 'camera' or 'window'
+input_mode = 'camera'  
 
 # Window name is using window
 win_name = 'zoom.us'                      
@@ -199,10 +200,10 @@ while(True):
 
 
             # Send command to server socket on raspberry pi
-            # with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            #     #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-            #     s.connect((HOST, PORT))
-            #     s.sendall(command.encode()) 
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                #s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+                s.connect((HOST, PORT))
+                s.sendall(command.encode()) 
 
 
 
