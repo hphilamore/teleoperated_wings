@@ -97,6 +97,8 @@ while(1):
             if msg == 'stop':
                 motor1.stop() 
                 motor2.stop()
+                motor3.stop() 
+                motor4.stop()
 
             elif msg == 'left':
                 motor1.stop()

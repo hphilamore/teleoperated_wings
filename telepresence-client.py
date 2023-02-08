@@ -22,8 +22,8 @@ import socket
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
-HOST = "192.168.0.101"  # The raspberry pi's hostname or IP address
-PORT = 65434            # The port used by the server
+HOST = "192.168.115.99"  # The raspberry pi's hostname or IP address
+PORT = 65442            # The port used by the server
 
 # Setup web cam ready for video capture 
 capture = cv2.VideoCapture(0)
@@ -90,12 +90,27 @@ while(True):
                 command = pos_to_command(x, z)
                 print(command)
 
-            # Send command to server socket on raspberry pi
-            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-                s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
-                s.connect((HOST, PORT))
-                s.sendall(command.encode())
-                data = s.recv(1024)
+        else:
+                print('No hand')
+                if not flag_no_hand:     # If there was a hand in previous frame
+                    flag_no_hand = True  # Raise the flag 
+                    start = time.time()  # Start the timer
+                    command = 'no command'
+
+                else:
+                    end = time.time()
+                    if end-start >= 3:
+                        flag_no_hand = False  # Lower the flag 
+                        print('stop')
+                        command = 'stop'  
+                        
+
+        # Send command to server socket on raspberry pi
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+            s.connect((HOST, PORT))
+            s.sendall(command.encode())
+            data = s.recv(1024)
 
 
         try:
