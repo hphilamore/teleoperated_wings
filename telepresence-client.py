@@ -18,12 +18,15 @@ import socket
 import cv2
 import mediapipe
 import socket
+import time
  
 drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
-HOST = "192.168.115.99"  # The raspberry pi's hostname or IP address
+HOST = "192.168.115.193"  # The raspberry pi's hostname or IP address
 PORT = 65442            # The port used by the server
+
+flag_no_hand = False 
 
 # Setup web cam ready for video capture 
 capture = cv2.VideoCapture(0)
@@ -103,14 +106,14 @@ while(True):
                         flag_no_hand = False  # Lower the flag 
                         print('stop')
                         command = 'stop'  
-                        
+
 
         # Send command to server socket on raspberry pi
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
+            # s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1) # Allow reuse of address
             s.connect((HOST, PORT))
             s.sendall(command.encode())
-            data = s.recv(1024)
+            # data = s.recv(1024)
 
 
         try:
