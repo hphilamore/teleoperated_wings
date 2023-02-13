@@ -1,6 +1,5 @@
 
-# Programs to run on computer 
-##*(Motion tracking of hands in a video feed)*
+# Programs to run on computer *(Motion tracking of hands in a video feed)*
 ## Computer set up and installation:
 - Clone git repository: https://github.com/hphilamore/mediapipe_hands_vid_send
 - Create virtual environment inside cloned repository: Run:[`python3 venv env`]
@@ -29,8 +28,7 @@
 - Note: Variable `HOST` should have same value equal to raspberry pi IP address
 - Note: Variable `PORT` should have same value as in [`telepresence-server.py`] 
 
-# Programs to run on raspberry pi robot
-## *(Moving in response to commands sent from computer)*
+# Programs to run on raspberry pi robot *(Moving in response to commands sent from computer)*
 
 ## Raspberry pi set up and installation:
 - Install buster legacy lite OS 
