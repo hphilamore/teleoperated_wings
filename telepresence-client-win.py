@@ -34,11 +34,11 @@ handsModule = mediapipe.solutions.hands
 
 # Set up server ID and port 
 # HOST = "192.168.227.193"    # The raspberry pi's hostname or IP address
-HOST = "192.168.115.193"    # The raspberry pi's hostname or IP address
+HOST = "192.168.89.182"    # The raspberry pi's hostname or IP address
 PORT = 65442                # The port used by the server
 
 # Take video stream from 'camera' or 'window'
-input_mode = 'camera'  
+input_mode = 'window'  
 
 # Window name is using window
 win_name = 'zoom.us'                      
