@@ -219,12 +219,12 @@ while(1):
             if msg == 'stop':
                 set_endless(0x03, False)
                 set_endless(0x04, False)
-                
+
                 GPIO.output(18,GPIO.HIGH)
                 move(0x04, 0)
-                time.sleep(1)
+                sleep(1)
                 move(0x04, 150)
-                time.sleep(1)
+                sleep(1)
             #     motor1.stop() 
             #     motor2.stop()
             #     motor3.stop() 
