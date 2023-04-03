@@ -353,25 +353,25 @@ def move_check(servo_id, position):
 	return(H, L)
 
  
-with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, min_tracking_confidence=0.7, max_num_hands=N_hands) as hands:
+# with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, min_tracking_confidence=0.7, max_num_hands=N_hands) as hands:
 
     
     #sweep(0x02)
     
     #forwards()
-    set_endless(0x03, False)
-    set_endless(0x04, False)
+set_endless(0x03, False)
+set_endless(0x04, False)
 
-   
 
-    while True:
 
-      move(0x04, 0)       # idle movements
-      move(0x03, 150)
-      time.sleep(0.1)
-      move(0x04, 150)
-      move(0x03, 0)
-      time.sleep(0.1)
+while True:
+
+  move(0x04, 0)       # idle movements
+  move(0x03, 150)
+  time.sleep(0.1)
+  move(0x04, 150)
+  move(0x03, 0)
+  time.sleep(0.1)
         
         
 #         print('Raw ADC Value: ', chan0.value, ', ADC Voltage: ' , round(chan0.voltage, 3) , 'V')
