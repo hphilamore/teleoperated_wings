@@ -10,10 +10,10 @@ import time
 
 import os
 # import busio
-import digitalio
-import board
-import adafruit_mcp3xxx.mcp3008 as MCP
-from adafruit_mcp3xxx.analog_in import AnalogIn
+# import digitalio
+# import board
+# import adafruit_mcp3xxx.mcp3008 as MCP
+# from adafruit_mcp3xxx.analog_in import AnalogIn
 
 # from smbus import SMBus
 # arduino = 0x8
