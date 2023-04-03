@@ -9,7 +9,7 @@ import serial
 import time
 
 import os
-import busio
+# import busio
 import digitalio
 import board
 import adafruit_mcp3xxx.mcp3008 as MCP
@@ -75,17 +75,17 @@ ccw = 0
 cw = 1
 
 
-# create the spi bus
-spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
-# create the cs (chip select)
-cs = digitalio.DigitalInOut(board.D22)
-# create the mcp object
-mcp = MCP.MCP3008(spi, cs)
-# create an analog input channel on pin 0
-chan0 = AnalogIn(mcp, MCP.P0)
-chan1 = AnalogIn(mcp, MCP.P1)
-chan2 = AnalogIn(mcp, MCP.P2)
-chan3 = AnalogIn(mcp, MCP.P3)
+# # create the spi bus
+# spi = busio.SPI(clock=board.SCK, MISO=board.MISO, MOSI=board.MOSI)
+# # create the cs (chip select)
+# cs = digitalio.DigitalInOut(board.D22)
+# # create the mcp object
+# mcp = MCP.MCP3008(spi, cs)
+# # create an analog input channel on pin 0
+# chan0 = AnalogIn(mcp, MCP.P0)
+# chan1 = AnalogIn(mcp, MCP.P1)
+# chan2 = AnalogIn(mcp, MCP.P2)
+# chan3 = AnalogIn(mcp, MCP.P3)
 
 
 def move(servo_id, position):
