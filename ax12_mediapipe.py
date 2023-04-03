@@ -274,9 +274,9 @@ def follow_hand(x, z):
              
         elif x > 0.6:              # turn right
             print('hand right')
-             move(0x04, 300)
-             time.sleep(0.4)
-             move(0x04, 0)
+            move(0x04, 300)
+            time.sleep(0.4)
+            move(0x04, 0)
             #turn(left, ccw,  0)
             #turn(right, cw, 500)
             
@@ -455,13 +455,13 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, mi
                 
         
         # comment out for set-up without display e.g/ headless raspberry pi
-        try:
-            cv2.imshow('Test hand', frame)
-        except:
-            pass
+#         try:
+#             cv2.imshow('Test hand', frame)
+#         except:
+#             pass
  
-        if cv2.waitKey(1) == 27:
-            break
+#         if cv2.waitKey(1) == 27:
+#             break
  
-cv2.destroyAllWindows()
-capture.release()
+# cv2.destroyAllWindows()
+# capture.release()
