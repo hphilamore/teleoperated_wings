@@ -24,7 +24,7 @@ drawingModule = mediapipe.solutions.drawing_utils
 handsModule = mediapipe.solutions.hands
 
 HOST = "192.168.134.93"  # The raspberry pi's hostname or IP address
-PORT = 65442            # The port used by the server
+PORT = 65443            # The port used by the server
 
 flag_no_hand = False 
 
