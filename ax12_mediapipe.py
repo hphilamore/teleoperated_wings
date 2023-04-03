@@ -367,7 +367,7 @@ with handsModule.Hands(static_image_mode=False, min_detection_confidence=0.7, mi
     while True:
 
       move(0x04, 0)       # idle movements
-      move 0x03, 150)
+      move(0x03, 150)
       time.sleep(0.1)
       move(0x04, 150)
       move(0x03, 0)
