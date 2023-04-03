@@ -42,7 +42,7 @@ left = 0x02
 # TODO: set serial permissions on RPi so that 'sudo su' not required to acess ttyS0 to run programme
 # https://roboticsbackend.com/raspberry-pi-hardware-permissions/
 # TODO: add set-up stuff to README on repo 
-Dynamixel=serial.Serial("/dev/ttyS0",baudrate=1000000,timeout=0.1, bytesize=8)   # UART in ttyS0 @ 1Mbps
+Dynamixel=serial.Serial("/dev/serial0",baudrate=1000000,timeout=0.1, bytesize=8)   # UART in ttyS0 @ 1Mbps
 
  
 # drawingModule = mediapipe.solutions.drawing_utils
@@ -366,12 +366,13 @@ set_endless(0x04, False)
 
 while True:
 
+  GPIO.output(18,GPIO.HIGH)
   move(0x04, 0)       # idle movements
-  move(0x03, 150)
-  time.sleep(0.1)
+  #move(0x03, 150)
+  time.sleep(1)
   move(0x04, 150)
-  move(0x03, 0)
-  time.sleep(0.1)
+  #move(0x03, 0)
+  time.sleep(1)
         
         
 #         print('Raw ADC Value: ', chan0.value, ', ADC Voltage: ' , round(chan0.voltage, 3) , 'V')
