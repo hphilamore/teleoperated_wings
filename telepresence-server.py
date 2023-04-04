@@ -8,6 +8,7 @@ import RPi.GPIO as GPIO
 import serial
 #import time
 import os
+from py_ax12 import *
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)

@@ -1,8 +1,10 @@
 import RPi.GPIO as GPIO
 import serial
-import time
+# import time
 import os
-import py_ax12
+from time import sleep
+from time import time
+from py_ax12 import *
 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
@@ -288,13 +290,13 @@ Dynamixel=serial.Serial("/dev/serial0",baudrate=1000000,timeout=0.1, bytesize=8)
 # 	return(H, L)
 
  
-py_ax12.set_endless(0x03, False)
-py_ax12.set_endless(0x04, False)
+set_endless(0x03, False, Dynamixel)
+set_endless(0x04, False, Dynamixel)
 
-# while True:
+while True:
 
-#   GPIO.output(18,GPIO.HIGH)
-#   move(0x04, 0)       
-#   time.sleep(1)
-#   move(0x04, 150)
-#   time.sleep(1)
+  GPIO.output(18,GPIO.HIGH)
+  move(0x04, 0, Dynamixel)       
+  sleep(1)
+  move(0x04, 150, Dynamixel)
+  sleep(1)

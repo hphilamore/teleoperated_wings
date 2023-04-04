@@ -1,3 +1,16 @@
+import RPi.GPIO as GPIO
+import serial
+import os
+from time import sleep
+from time import time
+
+GPIO.setwarnings(False)
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(18,GPIO.OUT)     # Control Data Direction Pin
+GPIO.setup(6,GPIO.OUT)      
+GPIO.setup(26,GPIO.OUT)
+
+
 right = 0x01
 left = 0x02
 
@@ -167,7 +180,7 @@ def binary_rotation(servo_id, x):
     set_endless(servo_id, True)
     if x > 0.5:
         GPIO.output(18,GPIO.HIGH) 
-        turn(servo_id, ccw, 500, , serial_object)
+        turn(servo_id, ccw, 500, serial_object)
 
 
     else:
