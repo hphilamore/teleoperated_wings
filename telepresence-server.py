@@ -55,6 +55,12 @@ while(1):
 
         while True:
 
+            set_endless(0x03, False, Dynamixel)
+            set_endless(0x04, False, Dynamixel)
+            set_endless(0x02, False, Dynamixel)
+            set_endless(0x01, False, Dynamixel)
+            GPIO.output(18,GPIO.HIGH)
+
             data = conn.recv(1024)
             if not data:
                 break
@@ -62,37 +68,39 @@ while(1):
             print(msg)
 
             if msg == 'stop':
-                set_endless(0x03, False, Dynamixel)
-                set_endless(0x04, False, Dynamixel)
+                pass
+                # set_endless(0x03, False, Dynamixel)
+                # set_endless(0x04, False, Dynamixel)
 
-                GPIO.output(18,GPIO.HIGH)
+                # GPIO.output(18,GPIO.HIGH)
+                # move(0x04, 0, Dynamixel)
+                # move(0x03, 0, Dynamixel)
+                # move(0x02, 0, Dynamixel)
+                # move(0x01, 0, Dynamixel)
+                # sleep(1)
+                # move(0x04, 150, Dynamixel)
+                # move(0x03, 150, Dynamixel)
+                # move(0x02, 150, Dynamixel)
+                # move(0x01, 150, Dynamixel)
+                # sleep(1)
+
+            elif msg == 'left':
                 move(0x04, 0, Dynamixel)
                 move(0x03, 0, Dynamixel)
                 move(0x02, 0, Dynamixel)
                 move(0x01, 0, Dynamixel)
-                sleep(1)
+                sleep(0.1)
+
+            elif msg == 'right':
                 move(0x04, 150, Dynamixel)
                 move(0x03, 150, Dynamixel)
                 move(0x02, 150, Dynamixel)
                 move(0x01, 150, Dynamixel)
-                sleep(1)
-            #     motor1.stop() 
-            #     motor2.stop()
-            #     motor3.stop() 
-            #     motor4.stop()
-
-            # elif msg == 'left':
-            #     motor1.stop()
-            #     motor2.forward(0.5)
-
-            # elif msg == 'right':
-            #     motor1.forward(0.5)
-            #     motor2.stop()
+                sleep(0.1)
                 
 
-            # elif msg == 'forward':
-            #     motor1.forward(0.5)
-            #     motor2.forward(0.5)
+            elif msg == 'forward':
+                pass
 
             #conn.sendall(data)
     
