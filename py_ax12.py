@@ -11,8 +11,8 @@ from time import time
 # GPIO.setup(26,GPIO.OUT)
 
 
-right = 0x01
-left = 0x02
+# right = 0x01
+# left = 0x02
 
 # Hex values to appear in instruction packet sent to servo
 ax_start = 0xFF       # 2 x FF bytes indicate start of incoming packet 
@@ -38,6 +38,10 @@ cw = 1
 
 
 def move(servo_id, position, serial_object):
+    """
+    Moves a servo with specified ID to specified angle (degrees)
+
+    """
 
 	P = position  # position as 10-bit number
 	
@@ -72,6 +76,13 @@ def move(servo_id, position, serial_object):
 
 
 def set_endless(servo_id, status, serial_object):
+
+    """
+    Set a servo with specified ID to:
+    - continuous rotation mode if true 
+    - servo mode if false
+
+    """
     
     if status: # turn endless rotation on               
 	
@@ -118,8 +129,14 @@ def set_endless(servo_id, status, serial_object):
     return(instruction_packet)
 
 
-def turn(servo_id, side, speed, serial_object):
-    if side == ccw:
+def turn(servo_id, direction, speed, serial_object):
+
+    """
+    Turns a servo in continous rotation mode with specified ID at speed 
+    and in direction given
+    """
+
+    if direction == ccw:
         #print('ccw')
         speed_h = speed >> 8 # convert position as 10-bit number to high 8 bit byte
         speed_l = speed & 0xff
@@ -154,29 +171,42 @@ def turn(servo_id, side, speed, serial_object):
     return(instruction_packet)
 
 
-def sweep(servo_id):
+def sweep(servo_id, serial_object):
+
+    """
+    Sweep a servo with specified ID over range 300 degrees 
+    """
     for i in range(300):
         move(servo_id, int(i/300 * 1024), serial_object)
         sleep(0.1)
         print(i)
         
-def binary_position(servo_id, x):
-    set_endless(servo_id, False)
+
+def binary_position(servo_id, x, serial_object):
+    """
+    Move servo to one angle or another based on x coordinate from motion 
+    tracking relative to threshold value 
+
+    """
+    set_endless(servo_id, False, serial_object)
+    GPIO.output(18,GPIO.HIGH) 
     if x > 0.5:
-        GPIO.output(18,GPIO.HIGH) 
         angle = 0
         move(servo_id, int(angle/300 * 1024), serial_object)
         print(angle)
 
         
     else:
-        GPIO.output(18,GPIO.HIGH)
         angle = 60
         move(servo_id, int(angle/300 * 1024), serial_object)   
         print(angle)
 
 
-def binary_rotation(servo_id, x):
+def binary_rotation(servo_id, x, serial_object):
+    """
+    Move servo one direction or another based on x coordinate from motion 
+    tracking relative to threshold value 
+    """
     set_endless(servo_id, True)
     if x > 0.5:
         GPIO.output(18,GPIO.HIGH) 
@@ -189,10 +219,14 @@ def binary_rotation(servo_id, x):
         
         
         
-def follow_hand(x, z):
+def follow_hand(x, z, serial_object, left=0x02, right=0x01):
+    """
+    Turn two servos labelled as left, configured as differential drive wheels 
+    on a robot, with relative speed based on x coordinate from motion tracking 
+    """
     GPIO.output(18,GPIO.HIGH) 
-    set_endless(0x01, True, serial_object)
-    set_endless(0x02, True, serial_object)
+    set_endless(left, True, serial_object)
+    set_endless(right, True, serial_object)
     
     if 0.0 < x < 1.0:              # hand detected in frame
         #val = int(255 * x)
@@ -229,15 +263,21 @@ def follow_hand(x, z):
             
             
         
-def continuous_position(servo_id, x):
-    #  Continous position selection based on hand tracking
-    if x >= 0:                         # move function only accepts positive integers 
+def continuous_position(servo_id, x, serial_object):
+    """
+    Angle of specified servo scaler value of x coordinate motion tracking
+    """
+    if x >= 0:   # move function only accepts positive integers                       
         finger_x_pos = x
         finger_x_pos *= 1024
-        move(servo_id, int(finger_x_pos), serial_object) 
+        move(servo_id, int(finger_x_pos), serial_object)  
         
         
-def forwards():
+def forwards(serial_object, left=0x02, right=0x01):
+    """
+    Turn two servos labelled as left and right in same direction if configured as 
+    differential drive wheels on a robot
+    """
     GPIO.output(18,GPIO.HIGH) 
     set_endless(left, True, serial_object)
     set_endless(right, True, serial_object)
@@ -247,6 +287,11 @@ def forwards():
 
 
 def move_check(servo_id, position):
+
+    """
+    Checking the checksum calculation 
+
+    """
 
 	P = position  # position as 10-bit number 
 
