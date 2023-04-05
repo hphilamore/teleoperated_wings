@@ -1,11 +1,16 @@
 
 # Programs to run on computer *(Motion tracking of hands in a video feed)*
 ## Computer set up and installation:
-- Clone git repository: https://github.com/hphilamore/mediapipe_hands_vid_send
+- Clone this git repository
 - Create virtual environment inside cloned repository: Run:[`python3 venv env`]
 - Add virtual environment to .gitignore file. Run:[`nano .gitignore`] and add line [`/env`]
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`pip3 install -r requirements.txt`]
+- Install requirements for open cv from either of these links
+    - https://raspberrypi-guide.github.io/programming/install-opencv
+    -https://stackoverflow.com/questions/53347759/importerror-libcblas-so-3-cannot-open-shared-object-file-no-such-file-or-dire)
+- Run:[`pip3 install opencv-python`]
+- Run:[`pip3 install mediapipe`]
 
 ## Hand tracking test programs
 <br>**A program to demonstrate hand tracking on video feed from default web-cam**
