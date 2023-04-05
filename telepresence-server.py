@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 
+"""
+
+TODO:
+- servo should read current positions and not do a full rotation when returning to start position
+- Close port if program crashes so that new number doesn’t have to be used 
+- GPIO all pins to zero when program killed (e.g. no motors left spinning)
+    - https://raspi.tv/2013/rpi-gpio-basics-3-how-to-exit-gpio-programs-cleanly-avoid-warnings-and-protect-your-pi
+    - https://gpiozero.readthedocs.io/en/stable/migrating_from_rpigpio.html
+
+"""
+
 import socket
 # from gpiozero import Motor, OutputDevice
 from time import sleep
@@ -16,22 +27,6 @@ GPIO.setup(18,GPIO.OUT)     # Control Data Direction Pin
 GPIO.setup(6,GPIO.OUT)      
 GPIO.setup(26,GPIO.OUT)
 
-# right = 0x01
-# left = 0x02
-
-# Define and setup GPIO pins
-# Rigth foot
-# motor1 = Motor(24, 27)
-# motor1_enable = OutputDevice(5, initial_value=1)
-# # Left foot
-# motor2 = Motor(6, 22)
-# motor2_enable = OutputDevice(17, initial_value=1)
-# # Right tentacle
-# motor3 = Motor(23, 16)
-# motor3_enable = OutputDevice(12, initial_value=1)
-# # Left tentacle
-# motor4 = Motor(13, 18)
-# motor4_enable = OutputDevice(25, initial_value=1) 
 
 # HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 HOST = "0.0.0.0"  # Listen on all interfaces
