@@ -42,21 +42,21 @@ def move(servo_id, position, serial_object):
     Moves a servo with specified ID to specified angle (degrees)
 
     """
+    P = position  # position as 10-bit number
 
-	P = position  # position as 10-bit number
-	
-	print(P/1024 * 300)
+    print(P/1024 * 300)
 
-	h = P >> 8    # value of high 8 bit byte
+    h = P >> 8    # value of high 8 bit byte
 
-	l = P & 0xff  # value of low 8-bit byte                 
-	
-	checksum = ~(servo_id + ax_goal_length + ax_write_data + 0x1E + h + l) & 0xff
+    l = P & 0xff  # value of low 8-bit byte
 
-  # convert to hex number full representation (with 0x...) 
-	checksum = format(checksum, '#04x') 
-	
-	instruction_packet = (format(ax_start, '02x') + " " +
+    checksum = ~(servo_id + ax_goal_length + ax_write_data + 0x1E + h + l) & 0xff
+
+    checksum = format(checksum, '#04x') # convert to hex number full representation (with 0x...)
+
+
+
+    instruction_packet = (format(ax_start, '02x') + " " +
                           format(ax_start, '02x') + " " +
                           format(servo_id, '02x') + " " + 
                           format(ax_goal_length, '02x') + " " +
@@ -67,12 +67,10 @@ def move(servo_id, position, serial_object):
                           checksum[2:] 
                           ).upper()
                           #str(ax_write_data) + str(0x1E) + str(l) + str(h) + str(checksum))
-	
-	#print(instruction_packet)
-	
-	serial_object.write(bytearray.fromhex(instruction_packet))
 
-	return(instruction_packet)
+    serial_object.write(bytearray.fromhex(instruction_packet))
+
+    return(instruction_packet)
 
 
 def set_endless(servo_id, status, serial_object):
@@ -287,11 +285,6 @@ def forwards(serial_object, left=0x02, right=0x01):
 
 
 def move_check(servo_id, position):
-
-    """
-    Checking the checksum calculation 
-
-    """
 
 	P = position  # position as 10-bit number 
 
