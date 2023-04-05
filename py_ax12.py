@@ -4,11 +4,11 @@ import os
 from time import sleep
 from time import time
 
-GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(18,GPIO.OUT)     # Control Data Direction Pin
-GPIO.setup(6,GPIO.OUT)      
-GPIO.setup(26,GPIO.OUT)
+# GPIO.setwarnings(False)
+# GPIO.setmode(GPIO.BCM)
+# GPIO.setup(18,GPIO.OUT)     # Control Data Direction Pin
+# GPIO.setup(6,GPIO.OUT)      
+# GPIO.setup(26,GPIO.OUT)
 
 
 right = 0x01

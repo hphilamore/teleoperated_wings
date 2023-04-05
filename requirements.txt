@@ -4,7 +4,6 @@ cycler==0.11.0
 fonttools==4.33.3
 kiwisolver==1.4.2
 matplotlib==3.5.2
-mediapipe==0.8.10
 MouseInfo==0.1.3
 mss==6.1.0
 numpy==1.22.4
