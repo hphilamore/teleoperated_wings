@@ -17,7 +17,7 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Run:[`pip3 install opencv-python`]
 - Run:[`pip3 install mediapipe`]
 
-## Hand tracking demo programs
+## Hand tracking demo programs (to run on computer)
 <br>**A program to demonstrate hand tracking on video feed from default web-cam**
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 hands_tracking_demo.py`]
@@ -26,18 +26,12 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 hands_tracking_demo_coordinates.py`]
 
-## Hand tracking tele-operation client program
-<br>**A program to track hand position in image from web-cam and send command to raspberry pi robot over wifi.**
-- Activate virtual environment: Run:[`source env/bin/activate`]
-- Run:[`python3 telepresence-client.py`]
-
+## Hand tracking tele-operation client program (to run on computer)
 <br>**A program to track hand position in image from web-cam OR desktop window OR to use arrow keys. <br> Chooses a command based on hand position/arrow key pressed.<br> Sends command to raspberry pi robot over wifi.**
 - Activate virtual environment: Run:[`source env/bin/activate`]
-- Run `telepresence-server.py` on robot to listen for client. 
-- Run:[`python3 telepresence-client-win.py`]
+- Run:[`python3 telepresence-client.py`]
 - Note: Variable `HOST` should have same value equal to raspberry pi IP address
-- Note: Variable `PORT` should have same value as in [`telepresence-server.py`] 
-
+- Note: Variable `PORT` should have same value as in [`telepresence-server.py`]
 
 ## Raspberry pi set up and installation:
 - Install buster legacy lite OS 
@@ -67,12 +61,12 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Run: [`pip3 install gpiozero rpi-gpio`]
 
 
-## Motor demo program
+## Motor demo program (to run on raspberry pi)
 **A program to drive the motors on the robot to test they are working**
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 motor_test.py`] 
 
-## Robot control tele-operation server program
+## Robot control tele-operation server program (to run on raspberry pi)
 **A program to make the robot respond to commands sent from computer **
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 telepresence-server.py`] 
