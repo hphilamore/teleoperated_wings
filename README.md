@@ -54,7 +54,7 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Run:[`sudo apt-get install python3-pip`]
 - Run:[`sudo apt-get install python3-venv`]
 - Clone this git repository. 
-- Create virtual environment inside cloned repository e.g. run:[`python3 -m venv env`]
+- Create virtual environment __inside__ cloned repository e.g. run:[`python3 -m venv env`]
 - Add virtual environment to .gitignore file. Run:[`nano .gitignore`] and add line e.g. [`/env`] 
 - Activate virtual environment e.g. run:[`source env/bin/activate`]
 - Run:[`pip3 install -r requirements.txt`]
