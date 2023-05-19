@@ -52,6 +52,13 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Clone this git repository. 
 - Create virtual environment __inside__ cloned repository e.g. run:[`python3 -m venv env`]
 - Add virtual environment to .gitignore file. Run:[`nano .gitignore`] and add line e.g. [`/env`] 
+- Edit virtual environment to include system site packages (e.g. RPi.GPIO) by setting include-system-site-packages to true:
+	`
+	# pyvenv.cfg
+	home = /Library/Frameworks/Python.framework/Versions/3.6/bin
+	include-system-site-packages = false
+	version = 3.6.4
+	`
 - Activate virtual environment e.g. run:[`source env/bin/activate`]
 - Run:[`pip3 install -r requirements.txt`]
 - Run: [`pip3 install gpiozero rpi-gpio`]
