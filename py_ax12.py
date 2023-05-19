@@ -44,7 +44,9 @@ def move(servo_id, position, serial_object):
     """
     P = position  # position as 10-bit number
 
-    print(P/1024 * 300)
+    print(type(P))
+
+    print(P/1024 * 300) # Convert to angle degrees
 
     h = P >> 8    # value of high 8 bit byte
 
@@ -107,7 +109,7 @@ def set_endless(servo_id, status, serial_object):
                      ax_ccw_angle_limit_l + ax_ccw_al_l + ax_ccw_al_h) & 0xff
         checksum = format(checksum, '#04x') # convert to hex number full representation (with 0x...)
         
-        print('checksum = ', checksum)
+        # print('checksum = ', checksum)
         
         instruction_packet = (format(ax_start, '02x') + " " +
                               format(ax_start, '02x') + " " +

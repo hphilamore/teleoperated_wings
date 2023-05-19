@@ -17,10 +17,11 @@ from time import sleep
 from time import time
 import RPi.GPIO as GPIO
 import serial
-#import time
 import os
 from py_ax12 import *
 
+
+# Setup GPIO pins 
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(18,GPIO.OUT)     # Control Data Direction Pin
@@ -30,14 +31,13 @@ GPIO.setup(26,GPIO.OUT)
 
 # HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 HOST = "0.0.0.0"  # Listen on all interfaces
-PORT = 65443  # Port to listen on (non-privileged ports are > 1023)
+PORT = 65443      # Port to listen on (non-privileged ports are > 1023)
 
+
+# Setup raspberry pi as server
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind((HOST, PORT))
 server_socket.listen()
-
-time_old = time()
-flag_wings = True
 
 # Create serial object 
 Dynamixel=serial.Serial("/dev/serial0",baudrate=1000000,timeout=0.1, bytesize=8)   # UART in ttyS0 @ 1Mbps
@@ -61,6 +61,63 @@ while(1):
                 break
             msg = data.decode()
             print(msg)
+
+            if msg != 'no command' and msg != 'stop':
+
+                coordinates = msg.split(',')
+
+                coordinates = [float(i) for i in coordinates]
+
+                # Grouped coordintes
+                coordinates = [coordinates[i:i+2] for i in range(0, len(coordinates), 2)]
+
+                print(coordinates)
+
+                # If more than 1 hand detected:
+                if len(coordinates) > 1:
+
+                    # If x position of both hands  are on the same side of the screen, ignore one hand
+                    if ((coordinates[0][0]<0.5 and coordinates[1][0]<0.5) or
+                        (coordinates[0][0]>=0.5 and coordinates[1][0]>=0.5)):
+                        coordinates = coordinates[0]
+
+                # For each hand 
+                for i in coordinates:
+                    x_position = i[0]
+                    # Hand x position on left side of screen
+                    if x_position<0.5:
+                        y_position = i[1] 
+                        # convert to 10-bit value
+                        servo_position = (y_position * 1024) 
+                        # Cap all negative values at 0
+                        if servo_position<1: servo_position = 0 
+                        # Convert floating point to integer
+                        servo_position = int(servo_position)
+                        # Send 10-bit value to servo
+                        move(0x04, servo_position, Dynamixel)
+
+                    # Hand x position on right side of screen
+                    if x_position>=0.5:
+                        y_position = i[1] 
+                        # convert to 10-bit value
+                        servo_position = (y_position * 1024) 
+                        # Cap all negative values at 0
+                        if servo_position<1: servo_position = 0 
+                        # Convert floating point to integer
+                        servo_position = int(servo_position)
+                        # Send 10-bit value to servo
+                        move(0x03, servo_position, Dynamixel)
+
+
+
+
+
+
+
+
+
+
+
 
             if msg == 'stop':
                 pass
