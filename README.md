@@ -53,10 +53,10 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Run:[`sudo apt install git`]
 - Run:[`sudo apt-get install python3-pip`]
 - Run:[`sudo apt-get install python3-venv`]
-- Clone git repository: https://github.com/hphilamore/teleoperated_turtle_robot.git
-- Create virtual environment inside cloned repository: Run:[`python3 -m venv env`]
-- Add virtual environment to .gitignore file. Run:[`nano .gitignore`] and add line [`/env`]
-- Activate virtual environment: Run:[`source env/bin/activate`]
+- Clone this git repository. 
+- Create virtual environment inside cloned repository e.g. run:[`python3 -m venv env`]
+- Add virtual environment to .gitignore file. Run:[`nano .gitignore`] and add line e.g. [`/env`] 
+- Activate virtual environment e.g. run:[`source env/bin/activate`]
 - Run:[`pip3 install -r requirements.txt`]
 - Run: [`pip3 install gpiozero rpi-gpio`]
 
