@@ -35,7 +35,7 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 
 ## Raspberry pi set up and installation:
 - Install buster legacy lite OS 
-- Add any additional wrifi networks to etc/wpa_supplicant/wpa_supplicant.conf
+- Add any additional wifi networks to etc/wpa_supplicant/wpa_supplicant.conf
 
 - (Optional) add static IP. Add following snippet to /etc/dhcpcd.conf:
 
