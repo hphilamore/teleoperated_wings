@@ -42,7 +42,7 @@ def move(servo_id, position, serial_object):
     Moves a servo with specified ID to specified angle (degrees)
 
     """
-    P = position  # position as 10-bit number
+    P = position  # position as integer representation of 10-bit value (in range 0 to 1024)
 
     print(type(P))
 
