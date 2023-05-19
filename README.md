@@ -1,5 +1,5 @@
 
-A set of client and server programs to run on a computer and raspberry pi robot respectively. 
+A set of client and server programs to run on a computer and raspberry pi robot respectively, in order to tele-operate the server robot from the client computer over a local wifi network. 
 
 The computer client is responsible for motion (hand) tracking from a video image and translating these into robot commands. 
 
