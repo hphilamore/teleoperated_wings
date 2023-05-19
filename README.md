@@ -64,10 +64,10 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - You may need to addtionally install pyserial with [`pip3 install pyserial`] - I can't get this package to work when installed within the virtual environment, so you may have to install this outside of the virtual environemnt so that it is included in the site packages
 
 
-## Motor demo program (to run on raspberry pi)
+## Servo motor demo program (to run on raspberry pi)
 **A program to drive the motors on the robot to test they are working**
 - Activate virtual environment: Run:[`source env/bin/activate`]
-- Run:[`python3 motor_test.py`] 
+- Run:[`python3 ax12_servo_test.py`] 
 
 ## Robot control tele-operation server program (to run on raspberry pi)
 **A program to make the robot respond to commands sent from computer **
