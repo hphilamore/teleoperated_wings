@@ -61,6 +61,7 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Activate virtual environment e.g. run:[`source env/bin/activate`]
 - Run:[`pip3 install -r requirements.txt`]
 - Run: [`pip3 install gpiozero rpi-gpio`]
+- You may need to addtionally install pyserial with [`pip3 install pyserial`] - I can't get this package to work when installed within the virtual environment, so you may have to install this outside of the virtual environemnt so that it is included in the site packages
 
 
 ## Motor demo program (to run on raspberry pi)
