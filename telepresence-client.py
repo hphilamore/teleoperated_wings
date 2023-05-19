@@ -31,7 +31,7 @@ import curses
 #-------------------------------------------------------------------------------
 """ SETUP """
 
-HOST = "192.168.0.100"  # The raspberry pi's hostname or IP address
+HOST = "192.168.146.223"  # The raspberry pi's hostname or IP address
 PORT = 65443            # The port used by the server
 
 # Take video stream from 'camera' or 'window' or 'keys'
