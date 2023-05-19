@@ -48,7 +48,7 @@
 	`
 
 - Open a terminal. Run:[`sudo raspi-config`]. 
-- Enable all interfaces (serial, camera, remote GPIO) and within serial select 'Would you like a login shell to be accessible over serial?'-> No, 'Would you like the serial port hardware to be enabled?' -> Yes
+- Enable all interfaces (serial, camera, remote GPIO) and within 'Serial Port' select 'Would you like a login shell to be accessible over serial?'-> No, 'Would you like the serial port hardware to be enabled?' -> Yes
 - Run:[`sudo apt update`]
 - Run:[`sudo apt install git`]
 - Run:[`sudo apt-get install python3-pip`]
