@@ -1,5 +1,10 @@
 
-# Programs to run on computer *(Motion tracking of hands in a video feed)*
+A set of client and server programs to run on a computer and raspberry pi robot respectively. 
+
+The computer client is responsible for motion (hand) tracking from a video image and translating these into robot commands. 
+
+The raspberry pi server recieves commands over wifi and controls the motion of the robot. 
+
 ## Computer set up and installation:
 - Clone this git repository
 - Create virtual environment inside cloned repository: Run:[`python3 venv env`]
@@ -12,7 +17,7 @@
 - Run:[`pip3 install opencv-python`]
 - Run:[`pip3 install mediapipe`]
 
-## Hand tracking test programs
+## Hand tracking demo programs
 <br>**A program to demonstrate hand tracking on video feed from default web-cam**
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 hands_tracking_demo.py`]
@@ -21,19 +26,18 @@
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 hands_tracking_demo_coordinates.py`]
 
-## Teleoperation programs
+## Hand tracking tele-operation client program
 <br>**A program to track hand position in image from web-cam and send command to raspberry pi robot over wifi.**
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 telepresence-client.py`]
 
-<br>**A program to track hand position in image from web-cam OR desktop window. <br> Chooses a command based on hand position.<br> Sends command to raspberry pi robot over wifi.**
+<br>**A program to track hand position in image from web-cam OR desktop window OR to use arrow keys. <br> Chooses a command based on hand position/arrow key pressed.<br> Sends command to raspberry pi robot over wifi.**
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run `telepresence-server.py` on robot to listen for client. 
 - Run:[`python3 telepresence-client-win.py`]
 - Note: Variable `HOST` should have same value equal to raspberry pi IP address
 - Note: Variable `PORT` should have same value as in [`telepresence-server.py`] 
 
-# Programs to run on raspberry pi robot *(Moving in response to commands sent from computer)*
 
 ## Raspberry pi set up and installation:
 - Install buster legacy lite OS 
@@ -48,7 +52,9 @@
 	`
 
 - Open a terminal. Run:[`sudo raspi-config`]. 
-- Enable all interfaces (serial, camera, remote GPIO) and within 'Serial Port' select 'Would you like a login shell to be accessible over serial?'-> No, 'Would you like the serial port hardware to be enabled?' -> Yes
+- Enable all interfaces (serial, camera, remote GPIO)
+- Within 'Serial Port' select 'Would you like a login shell to be accessible over serial?'-> No, 'Would you like the serial port hardware to be enabled?' -> Yes
+- Choose 'Finish' and reboot if prompted
 - Run:[`sudo apt update`]
 - Run:[`sudo apt install git`]
 - Run:[`sudo apt-get install python3-pip`]
@@ -61,12 +67,12 @@
 - Run: [`pip3 install gpiozero rpi-gpio`]
 
 
-## Motor test program
+## Motor demo program
 **A program to drive the motors on the robot to test they are working**
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 motor_test.py`] 
 
-## Telepresence program:
+## Robot control tele-operation server program
 **A program to make the robot respond to commands sent from computer **
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`python3 telepresence-server.py`] 
