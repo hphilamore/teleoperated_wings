@@ -11,7 +11,7 @@ The raspberry pi server recieves commands over wifi and controls the motion of t
 - Add virtual environment to .gitignore file. Run:[`nano .gitignore`] and add line [`/env`]
 - Activate virtual environment: Run:[`source env/bin/activate`]
 - Run:[`pip3 install -r requirements.txt`]
-- Install requirements for open cv from either of these links
+- Install pre-requisites for open cv from either of these links
     - https://raspberrypi-guide.github.io/programming/install-opencv
     -https://stackoverflow.com/questions/53347759/importerror-libcblas-so-3-cannot-open-shared-object-file-no-such-file-or-dire)
 - Run:[`pip3 install opencv-python`]
