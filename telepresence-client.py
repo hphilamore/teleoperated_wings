@@ -15,7 +15,6 @@ Sends command to raspberry pi robot over wifi.
 """
 
 
-import socket
 import cv2
 import mediapipe
 import socket
@@ -35,17 +34,18 @@ HOST = "192.168.146.223"  # The raspberry pi's hostname or IP address
 PORT = 65443            # The port used by the server
 
 # Take video stream from 'camera' or 'window' or 'keys'
-input_mode = 'camera'  
+input_mode = 'camera'#'window'#'camera'  
 
 # Window name is using window
 win_name = 'zoom.us'                      
 #win_name = 'Microsoft Teams'
 win_name = 'zoom.us:Zoom Meeting'          # Find zoom meeting window 
-#win_name = 'zoom.us:zoom floating video'  # Find zoom meeting window during share screen 
+win_name = 'zoom.us:zoom floating video'  # Find zoom meeting window during share screen ('pin' caller in zoom)
 #win_name = 'Vysor'                        # Find vysor window for robot POV 
 #win_name = 'Vysor:SM'                     # Find vysor window for robot POV 
 #win_name = 'Vysor:ART'                    # Find vysor window for robot POV 
-win_name = 'Photo Booth:Photo Booth'   
+# win_name = 'Photo Booth:Photo Booth' 
+# win_name = 'GoPro Webcam:'  
 
 
 # Choose OC as macOS or windowsOS 
@@ -58,7 +58,7 @@ grab_full_screen_image = False
 make_output_window_fullscreen = True
 
 # Send command to raspberry pi
-send_command = True
+send_command = False
 
 # Number of hands to track
 n_hands = 2
