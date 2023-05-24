@@ -15,7 +15,6 @@ Sends command to raspberry pi robot over wifi.
 """
 
 
-import socket
 import cv2
 import mediapipe
 import socket
@@ -59,7 +58,7 @@ grab_full_screen_image = False
 make_output_window_fullscreen = True
 
 # Send command to raspberry pi
-send_command = True
+send_command = False
 
 # Number of hands to track
 n_hands = 2
