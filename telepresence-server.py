@@ -83,6 +83,7 @@ while(1):
 
                 # For each hand 
                 for i in coordinates:
+                    print('x_position', x_position)
                     x_position = i[0]
                     # Hand x position on left side of screen
                     if x_position<0.5:
