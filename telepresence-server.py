@@ -79,13 +79,12 @@ while(1):
                     # If x position of both hands  are on the same side of the screen, ignore one hand
                     if ((coordinates[0][0]<0.5 and coordinates[1][0]<0.5) or
                         (coordinates[0][0]>=0.5 and coordinates[1][0]>=0.5)):
-                        coordinates = coordinates[0]
+                        coordinates = [coordinates[0]]
 
                 # For each hand 
                 for i in coordinates:
-                    
                     x_position = i[0]
-                    print('x_position', x_position)
+
                     # Hand x position on left side of screen
                     if x_position<0.5:
                         y_position = i[1] 
