@@ -58,7 +58,7 @@ grab_full_screen_image = False
 make_output_window_fullscreen = True
 
 # Send command to raspberry pi
-send_command = False
+send_command = True
 
 # Number of hands to track
 n_hands = 2
