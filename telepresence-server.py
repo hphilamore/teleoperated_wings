@@ -53,6 +53,9 @@ def running_mean(new_val, arr, win_size):
 arr_left = list(np.full((5,), np.nan))
 arr_right = list(np.full((5,), np.nan))
 
+hand_left = False
+hand_right = False
+
 
 while(1):
 
