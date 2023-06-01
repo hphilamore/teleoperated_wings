@@ -83,7 +83,6 @@ while(1):
 
                 # For each hand 
                 for i in coordinates:
-                    print(coordinates)
                     x_position = i[0]
 
                     # Hand x position on left side of screen
