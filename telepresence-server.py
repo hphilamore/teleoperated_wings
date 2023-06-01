@@ -49,8 +49,8 @@ def running_mean(new_val, arr, win_size):
     return np.nanmean(arr[:win_size])
 
 
-arr_left = np.empty(5,1)
-arr_right = np.empty(5,1)
+arr_left = np.empty((5,1))
+arr_right = np.empty((5,1))
 
 
 while(1):
