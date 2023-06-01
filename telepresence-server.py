@@ -42,6 +42,16 @@ server_socket.listen()
 # Create serial object 
 Dynamixel=serial.Serial("/dev/serial0",baudrate=1000000,timeout=0.1, bytesize=8)   # UART in ttyS0 @ 1Mbps
 
+def running_mean(new_val, arr, win_size):
+    arr = arr.insert(arr, 0, new_val)
+    print(arr)
+    return np.nanmean(arr[:win_size])
+
+
+arr_left = np.empty(5,1)
+arr_right = np.empty(5,1)
+
+
 while(1):
 
     conn, addr = server_socket.accept()
@@ -84,28 +94,40 @@ while(1):
                 # For each hand 
                 for i in coordinates:
                     x_position = i[0]
+                    y_position = i[1] 
 
                     # Hand x position on left side of screen
                     if x_position<0.5:
-                        y_position = i[1] 
-                        # convert to 10-bit value
-                        servo_position = (y_position * 1024) 
-                        # Cap all negative values at 0
-                        if servo_position<1: servo_position = 0 
-                        # Convert floating point to integer
-                        servo_position = int(servo_position)
+                        # y_position = i[1] 
+
+                        # # convert to 10-bit value
+                        # servo_position = (y_position * 1024) 
+
+                        # # Cap all negative values at 0
+                        # if servo_position<1: servo_position = 0 
+
+                        # M = running_mean(servo_position, arr_left, 5)
+                        # print(servo_position, M)
+
+                        # # Convert floating point to integer
+                        # servo_position = int(servo_position)
+
                         # Send 10-bit value to servo
                         move(0x04, servo_position, Dynamixel)
 
                     # Hand x position on right side of screen
                     if x_position>=0.5:
-                        y_position = i[1] 
-                        # convert to 10-bit value
-                        servo_position = (y_position * 1024) 
-                        # Cap all negative values at 0
-                        if servo_position<1: servo_position = 0 
-                        # Convert floating point to integer
-                        servo_position = int(servo_position)
+                        # y_position = i[1] 
+
+                        # # convert to 10-bit value
+                        # servo_position = (y_position * 1024) 
+
+                        # # Cap all negative values at 0
+                        # if servo_position<1: servo_position = 0 
+
+                        # # Convert floating point to integer
+                        # servo_position = int(servo_position)
+
                         # Send 10-bit value to servo
                         move(0x03, servo_position, Dynamixel)
 

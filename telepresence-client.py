@@ -30,11 +30,11 @@ import curses
 #-------------------------------------------------------------------------------
 """ SETUP """
 
-HOST = "192.168.146.223"  # The raspberry pi's hostname or IP address
+HOST = "192.168.185.223"  # The raspberry pi's hostname or IP address
 PORT = 65443            # The port used by the server
 
 # Take video stream from 'camera' or 'window' or 'keys'
-input_mode = 'window'#'camera'##'camera'  
+input_mode = 'camera' #'window'#'camera'##'camera'  
 
 # Window name is using window
 win_name = 'zoom.us'                      
@@ -80,30 +80,30 @@ flag_no_hand = False
 capture = cv2.VideoCapture(0)
 
 
-def pos_to_command(x, y, z):
-    """
-    Translates position of hand detected to command sent to robot
-    """
-    if 0.0 < x < 1.0:        # Check hand detected in frame
-        # if z <= -0.15:       # Stop if too close
-        #     out = 'stop'          
+# def pos_to_command(x, y, z):
+#     """
+#     Translates position of hand detected to command sent to robot
+#     """
+#     if 0.0 < x < 1.0:        # Check hand detected in frame
+#         # if z <= -0.15:       # Stop if too close
+#         #     out = 'stop'          
 
-        if x < 0.4:        # Turn left
-            out = 'left'
+#         if x < 0.4:        # Turn left
+#             out = 'left'
              
-        elif x > 0.6:        # Turn right 
-            out = 'right'
+#         elif x > 0.6:        # Turn right 
+#             out = 'right'
             
-        else:                # Go forwards
-            if y >= 0.5:
-                out = 'backward'
-            else:
-                out = 'forward'
+#         else:                # Go forwards
+#             if y >= 0.5:
+#                 out = 'backward'
+#             else:
+#                 out = 'forward'
 
-    else:
-        out = 'none'
+#     else:
+#         out = 'none'
 
-    return out
+#     return out
 
 
 if input_mode == 'keys':
@@ -272,7 +272,7 @@ while(True):
             print(command)
 
         else:
-                print('No hand')
+                print('no hand')
                 if not flag_no_hand:     # If there was a hand in previous frame
                     flag_no_hand = True  # Raise the flag 
                     start = time.time()  # Start the timer
