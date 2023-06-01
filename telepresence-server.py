@@ -78,23 +78,25 @@ while(1):
 
                 coordinates = msg.split(',')
 
+                # Convert string to floating point data 
                 coordinates = [float(i) for i in coordinates]
 
-                # Grouped coordintes
-                coordinates = [coordinates[i:i+2] for i in range(0, len(coordinates), 2)]
+                # Grouped coordintes in x,y pairs for each hand detected
+                hands = [coordinates[i:i+2] for i in range(0, len(coordinates), 2)]
 
                 # print(coordinates)
 
-                # If more than 1 hand detected:
-                if len(coordinates) > 1:
+                # If 2 hands detected:
+                if len(hands) > 1:
 
-                    # If x position of both hands  are on the same side of the screen, ignore one hand
-                    if ((coordinates[0][0]<0.5 and coordinates[1][0]<0.5) or
-                        (coordinates[0][0]>=0.5 and coordinates[1][0]>=0.5)):
-                        coordinates = [coordinates[0]]
+                    # If x coordinate of both hands are on the same side of the screen, ignore one hand
+                    if ((hands[0][0]<0.5 and hands[1][0]<0.5) or
+                        (hands[0][0]>=0.5 and hands[1][0]>=0.5)):
+                        hands = [hands[0]]
 
                 # For each hand 
-                for i in coordinates:
+                for i in hands:
+
                     x_position = i[0]
                     y_position = i[1] 
 
@@ -109,43 +111,51 @@ while(1):
 
                     # Hand x position on left side of screen
                     if x_position<0.5:
-                        # y_position = i[1] 
 
-                        # # convert to 10-bit value
-                        # servo_position = (y_position * 1024) 
+                        # hand_left = True
 
-                        # # Cap all negative values at 0
-                        # if servo_position<1: servo_position = 0 
-
-                        # M = running_mean(servo_position, arr_left, 5)
-                        # print(servo_position, 'running mean =', M)
-
-                        # # Convert floating point to integer
-                        # servo_position = int(servo_position)
+                        # Moving average filter applied, Position rounded to nearest decimal value
+                        smoothed_position = int(running_mean(servo_position, arr_left, 20)) //10 * 10
 
                         # Send 10-bit value to servo
-                        move(0x04, servo_position, Dynamixel)
+                        # move(0x04, servo_position, Dynamixel)
+                        move(0x04, smoothed_position, Dynamixel)
+
+                    # else:
+                        # hand_left = False
+
 
                     # Hand x position on right side of screen
                     if x_position>=0.5:
-                        # y_position = i[1] 
 
-                        # # convert to 10-bit value
-                        # servo_position = (y_position * 1024) 
+                        # hand_right = True
 
-                        # # Cap all negative values at 0
-                        # if servo_position<1: servo_position = 0 
+                        # Moving average filter applied, Position rounded to nearest decimal value
+                        smoothed_position = int(running_mean(servo_position, arr_right, 20)) //10 * 10
 
-                        M = int(running_mean(servo_position, arr_right, 20))
-                        M = M//10 * 10
-                        print('servo_position', servo_position, 'running mean =', M)
-                        servo_position = M
-
-                        # # Convert floating point to integer
-                        # servo_position = int(servo_position)
 
                         # Send 10-bit value to servo
-                        move(0x03, servo_position, Dynamixel)
+                        # move(0x03, servo_position, Dynamixel)
+                        move(0x03, smoothed_position, Dynamixel)
+
+                    # else:
+                    #     hand_right = False
+
+
+
+            #     # Reset filter array if no hand detected on right or left 
+            #     if not hand_left:
+            #         arr_left = list(np.full((5,), np.nan))
+
+            #     if not hand_right:
+            #         arr_right = list(np.full((5,), np.nan))
+
+            # # Reset filter array if no hand detected on right and left 
+            # else:
+            #     arr_left = list(np.full((5,), np.nan))
+            #     arr_right = list(np.full((5,), np.nan))
+
+
 
 
 
