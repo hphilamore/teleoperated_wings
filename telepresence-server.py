@@ -97,6 +97,15 @@ while(1):
                     x_position = i[0]
                     y_position = i[1] 
 
+                    # convert to 10-bit value
+                    servo_position = (y_position * 1024) 
+
+                    # Cap all negative values at 0
+                    if servo_position<1: servo_position = 0 
+
+                    # Convert floating point to integer
+                    servo_position = int(servo_position)
+
                     # Hand x position on left side of screen
                     if x_position<0.5:
                         # y_position = i[1] 
