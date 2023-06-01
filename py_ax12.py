@@ -44,9 +44,9 @@ def move(servo_id, position, serial_object):
     """
     P = position  # position as integer representation of 10-bit value (in range 0 to 1024)
 
-    print(type(P))
+    # print(type(P))
 
-    print(P/1024 * 300) # Convert to angle degrees
+    # print(P/1024 * 300) # Show angle in degrees
 
     h = P >> 8    # value of high 8 bit byte
 

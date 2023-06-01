@@ -44,13 +44,14 @@ server_socket.listen()
 Dynamixel=serial.Serial("/dev/serial0",baudrate=1000000,timeout=0.1, bytesize=8)   # UART in ttyS0 @ 1Mbps
 
 def running_mean(new_val, arr, win_size):
-    arr = arr.insert(arr, 0, new_val)
+    arr.insert(0, new_val)
+    arr = arr[:win_size]
     print(arr)
-    return np.nanmean(arr[:win_size])
+    return np.nanmean(np.array(arr[:win_size]))
 
 
-arr_left = np.empty((5,1))
-arr_right = np.empty((5,1))
+arr_left = list(np.full((5,), np.nan))
+arr_right = list(np.full((5,), np.nan))
 
 
 while(1):
@@ -71,7 +72,7 @@ while(1):
             if not data:
                 break
             msg = data.decode()
-            print(msg)
+            # print(msg)
 
             if msg != 'no command' and msg != 'stop':
 
@@ -82,7 +83,7 @@ while(1):
                 # Grouped coordintes
                 coordinates = [coordinates[i:i+2] for i in range(0, len(coordinates), 2)]
 
-                print(coordinates)
+                # print(coordinates)
 
                 # If more than 1 hand detected:
                 if len(coordinates) > 1:
@@ -117,7 +118,7 @@ while(1):
                         # if servo_position<1: servo_position = 0 
 
                         # M = running_mean(servo_position, arr_left, 5)
-                        # print(servo_position, M)
+                        # print(servo_position, 'running mean =', M)
 
                         # # Convert floating point to integer
                         # servo_position = int(servo_position)
@@ -134,6 +135,11 @@ while(1):
 
                         # # Cap all negative values at 0
                         # if servo_position<1: servo_position = 0 
+
+                        M = int(running_mean(servo_position, arr_right, 20))
+                        M = M//10 * 10
+                        print('servo_position', servo_position, 'running mean =', M)
+                        servo_position = M
 
                         # # Convert floating point to integer
                         # servo_position = int(servo_position)
